@@ -1,0 +1,28 @@
+# Interoperability Testing for Unauthenticated Resolver-to-Authoritative DNS
+
+This chart is to assist developers and operators who want to test pre-standards versions of
+[draft-ietf-dprive-unauth-to-authoritative](https://datatracker.ietf.org/doc/draft-ietf-dprive-unauth-to-authoritative/)
+for unauthenticated encrypted DNS.
+
+Updates to this chart should be submitted as pull requests.
+If that is not possible, please send mail to
+[Peter van Dijk](peter.van.dijk@powerdns.com) or [Paul Hoffman](mailto:paul.hoffman@icann.org).
+
+In the chart, the organization and contacts are used simply for testing, not as a promise that any particular organization will
+actually support unauthenticated encrypted DNS in the future.
+
+An organization that wants to test interop from a resolver should give one or more IP addresses where
+servers might expect to see unauthenticated encrypted DNS queries.
+
+An organization that wants to test interop for unauthenticated encrypted DNS service should give one or more IP addresses where
+resolvers might query.
+The notes needs to list zones for which those servers are authoritative.
+
+For both types of systems, The notes might list which protocols (DoT, DoH, DoQ, ...) that will be tested.
+The notes can also have other testing notes.
+
+| Organization | Contact(s) | Resolver address(es) | Authoritative address(es) | Notes |
+| :-- | :-- | :-- | :-- | :-- |
+|  |  |  |  |  |
+
+This page can also be expanded to include other testing notes as desired by the testing community.
