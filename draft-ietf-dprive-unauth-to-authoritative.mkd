@@ -154,9 +154,9 @@ encrypted transport of DNS queries.
 The terms "recursive resolver", "authoritative server", and "classic DNS" are defined in
 {{DNS-TERM}}.
 
-"DNS with encryption" means transport of DNS over any of DoT, DoH, or DoQ.
-A server that supports DNS with encryption supports transport over one or more
-of DoT, DoH, or DoQ.
+"DNS with encryption" means transport of DNS over any of DoT, DoH, or DoQ, and throughout
+this document will be referred to as 'DwE'. A server that supports DwE
+supports transport over one or more of DoT, DoH, or DoQ.
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",
@@ -167,11 +167,11 @@ appear in all capitals, as shown here.
 
 # Discovery of Authoritative Server Encryption {#disc}
 
-An authoritative server that supports DNS with encryption makes itself discoverable by publishing
+An authoritative server that supports DwE makes itself discoverable by publishing
 one or more DNS SVCB records that contain "alpn" parameter keys.
 SVCB records are defined in {{SVCB}}, and the DNS extension to those records is defined in {{DNS-SVCB}}.
 
-A recursive resolver discovers whether an authoritative server supports DNS with encryption by
+A recursive resolver discovers whether an authoritative server supports DwE by
 looking for cached SVCB records for the name of the authoritative server with a positive answer.
 A cached DNS SVCB record with a negative answer indicates that the authoritative server does not support any encrypted transport.
 
@@ -179,10 +179,10 @@ A resolver MAY also use port probing, although the mechanism for that is not des
 
 If the cache has no positive or negative answers for any SVCB record for any of a zone's authoritative servers,
 the resolver MAY send queries for the SVCB records (and for the A/AAAA records of names mentioned in those SVCB records) for some or all of the zone's authoritative servers
-and wait for a positive response so that the resolver can use DNS with encryption for the original query.
+and wait for a positive response so that the resolver can use DwE for the original query.
 In this situation, the resolver MAY instead just use classic DNS for the original query
 but simultaneously queue queries for the SVCB (and subsequent A/AAAA) records for some or all of the zone's authoritative servers
-so that future queries might be able to use DNS with encryption.
+so that future queries might be able to use DwE.
 
 DNSSEC validation of SVCB RRsets used strictly for this discovery mechanism is not mandated.
 
@@ -190,7 +190,7 @@ DNSSEC validation of SVCB RRsets used strictly for this discovery mechanism is n
 # Processing Discovery Responses {#proc}
 
 After a resolver has DNS SCVB records in its cache (possibly due to having just queried for them),
-it needs to use those records to try to find an authoritative server that supports DNS with encryption.
+it needs to use those records to try to find an authoritative server that supports DwE.
 This section describes how the resolver can make that selection.
 
 A resolver MUST NOT attempt encryption for a server that has a negative response in the resolver's cache for the associated
@@ -203,21 +203,21 @@ Similarly, if none of the DNS SVCB records for the authoritative servers in the 
 the resolver MUST use classic (unencrypted) DNS instead of encryption.
 
 If there are any DNS SVCB records in the cache for the authoritative servers for a zone with supported "alpn" parameters,
-the resolver MUST try each indicated authoritative server using DNS with encryption until it successfully sets up a connection.
+the resolver MUST try each indicated authoritative server using DwE until it successfully sets up a connection.
 The resolver attempts to use the encrypted transports that are in the associated SVCB record for the authoritative server.
 
-A resolver SHOULD keep a DNS with encryption session to a particular server open if it expects to send additional queries
+A resolver SHOULD keep a DwE session to a particular server open if it expects to send additional queries
 to that server in a short period of time.
 {{DNS-OVER-TCP}} says "both clients and servers SHOULD support connection reuse" for TCP
-connections, and that advice could apply as well for DNS with encryption,
-especially as DNS with encryption has far greater overhead for re-establishing a connection.
-If the server closes the DNS with encryption session, the resolver can possibly re-establish a DNS with encryption session
+connections, and that advice could apply as well for DwE,
+especially as DwE has far greater overhead for re-establishing a connection.
+If the server closes the DwE session, the resolver can possibly re-establish a DwE session
 using encrypted session resumption.
 Configuration for the maximum timeout, minimum timeout, and duration of encrypted sessions
 should take into consideration the recommendations given in
 {{TCP-TIMEOUT}}, {{EDNS-TCP}}, and (for DoH) {{HTTP-1.1}}.
 
-For any DNS with encryption protocols, TLS version 1.3 {{TLS-13}} or later MUST be used.
+For any DwE protocols, TLS version 1.3 {{TLS-13}} or later MUST be used.
 
 A resolver following this protocol does not need to authenticate TLS servers.
 Thus, when setting up a TLS connection, if the server's authentication credentials do not match those
@@ -269,7 +269,7 @@ query using classic DNS; finished
 
 ## Resolver Session Failures {#tls_failures}
 
-The following are some of the reasons that a DNS with encryption session might fail to be set up:
+The following are some of the reasons that a DwE session might fail to be set up:
 
 - The resolver receives a TCP RST response
 - The resolver does not receive replies to TCP or TLS setup (such as getting the
@@ -294,12 +294,12 @@ if it has not received a DNS query in a defined length of time.
 The server MAY close an encrypted session after it sends a DNS response;
 however, it might also want to keep the session open waiting for another DNS query from the resolver.
 {{DNS-OVER-TCP}} says "both clients and servers SHOULD support connection reuse" for TCP
-connections, and that advice could apply as well for DNS with encryption,
-especially as DNS with encryption has far greater overhead for re-establishing a connection.
-If the server closes the DNS with encryption session, the resolver can possibly re-establish a DNS with encryption session
+connections, and that advice could apply as well for DwE,
+especially as DwE has far greater overhead for re-establishing a connection.
+If the server closes the DwE session, the resolver can possibly re-establish a DwE session
 using encrypted session resumption.
 
-For any DNS with encryption protocols, TLS version 1.3 {{TLS-13}} or later MUST be used.
+For any DwE protocols, TLS version 1.3 {{TLS-13}} or later MUST be used.
 
 
 # IANA Considerations
