@@ -100,7 +100,7 @@ supports encryption in {{disc}}.
 See {{FULL-AUTH}} for a description of the use case and a proposed mechanism
 for fully-authenticated encryption.
 
-NOTE: The draft uses the SVCB record as a discovery mechanism for encryption by a particular authoritative server.
+NOTE: The draft uses the SVCB record as a discovery mechanism for encryption supported by a particular authoritative server.
 Any record type that can show multiple types of encryption (currently DoT, DoH, and DoQ) can be used for discovery.
 Thus, this record type might change in the future, depending on the discussion in the DPRIVE WG.
 
@@ -112,11 +112,11 @@ authoritative server operators that are happy to use encryption with recursive r
 doesn’t cost much.
 In this use case, resolvers do not want to return an error for requests that were sent over an
 encrypted channel if they would have been able to give a correct answer using unencrypted transport.
-Ultimately, this effort has two two goals:
-to protect queries from failing in case authenticated encryption is not available,
-and to enable recursive resolver operators to encrypt without server authentication. 
+Ultimately, this effort has two goals:
+- to protect queries from failing in case authenticated encryption is not available,
+- and to enable recursive resolver operators to encrypt without server authentication.
 
-Resolvers and authoritative servers understand that using encryption costs something, but are willing to absorb the costs
+Operators of resolvers and authoritative servers understand that using encryption costs something, but are willing to absorb the costs
 for the benefit of more Internet traffic being encrypted.
 The extra costs (compared to using traditional DNS on port 53) include:
 
@@ -147,7 +147,7 @@ encrypted transport of DNS queries.
 
 - The resolver uses any authoritative server with a SVCB record that indicates encryption to perform unauthenticated encryption.
 
-- The resolver does not fail to set up encryption if server authentication in the TLS session fails.
+- The resolver sets up encryption even if server authentication in the TLS session fails.
 
 ## Definitions
 
@@ -190,10 +190,10 @@ DNSSEC validation of SVCB RRsets used strictly for this discovery mechanism is n
 # Processing Discovery Responses {#proc}
 
 After a resolver has DNS SCVB records in its cache (possibly due to having just queried for them),
-it needs to use those records to try to find an authoritative server that uses DNS with encryption.
+it needs to use those records to try to find an authoritative server that supports DNS with encryption.
 This section describes how the resolver can make that selection.
 
-A resolver MUST NOT attempt encryption for a server that has a negative response in its cache for the associated
+A resolver MUST NOT attempt encryption for a server that has a negative response in the resolver's cache for the associated
 DNS SVCB record.
 
 After sending out all requests for SVCB records for the authoritative servers in the NS RRset for a name,
@@ -225,8 +225,9 @@ expected by the resolver, the resolver continues with the TLS connection.
 Privacy-oriented resolvers (defined in {{PRIVACY-REC}}) following this protocol MUST NOT indicate that they are using
 encryption because this protocol is susceptible to on-path attacks.
 
-If the resolver gets a TLS failure (such as those listed in {{tls_failures}},
-the resolver instead uses classic DNS on any of the authoritative servers.
+If the resolver's connection attempts to each candidate authoritative server
+experience TLS failures (such as those in {{tls_failure}}), the resolver
+instead queries using classic DNS with any of the authoritative servers.
 
 ## Resolver Process as Pseudocode {#resolver_pseudocode}
 
@@ -256,7 +257,7 @@ for this_name in ns_names:
 
 # Query over secure transport until successful
 for (this_name, this_transport) tuple in secure_names_and_transports:
-  query using this_transport on this_name 
+  query using this_transport on this_name
   if successful:
     finished
 
