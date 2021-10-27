@@ -154,8 +154,8 @@ encrypted transport of DNS queries.
 The terms "recursive resolver", "authoritative server", and "classic DNS" are defined in
 {{DNS-TERM}}.
 
-"DNS with encryption" means transport of DNS over any of DoT, DoH, or DoQ, and throughout
-this document will be referred to as 'DwE'. A server that supports DwE
+"DNS with encryption" (DwE) means transport of DNS over any of DoT, DoH, or DoQ.
+A server that supports DwE
 supports transport over one or more of DoT, DoH, or DoQ.
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -332,7 +332,8 @@ See {{PRIVACY-REC}} and {{PRIVACY-CONS}} for in-depth discussion of the associat
 
 # Acknowledgements
 
-Puneet Sood contributed many ideas to early drafts of this document.
+Puneet Sood contributed many ideas to early drafts of this document. Kevin Fleming provided good
+clarifications.
 
 The DPRIVE Working Group has contributed many ideas that keep shifting the focus and content of this document.
 
